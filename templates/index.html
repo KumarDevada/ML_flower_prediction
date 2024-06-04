@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background-color: whitesmoke;
+            color: #fea4b9;
+            font-family:monospace;
+        }
+        nav {
+            padding: 10px;
+            background-color: white;
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+        }
+        h1 {
+            font-size: 32px;
+            font-weight: 3200;
+        }
+        h3 {
+            text-align: center;
+            color: dodgerblue;
+        }
+        .im {
+            width: 40px;
+        }
+        .ib {
+            width: 360px;
+        }
+        .vb {
+            width: 360px;
+            border-radius: 5px;
+            color: white;
+            background-color: #fec1d0;
+        }
+        .hb {
+            display: flex;
+            margin: 10px 0px;
+            padding: 10px 10px;
+            flex-direction: column;
+            align-items: center;
+            gap: 0px;
+            width: 95%;
+            border-radius: 10px;
+        }
+        input[type='range'] {
+            width: 100%;
+        }
+        
+        .flo {
+            width: 360px;
+            border-radius: 20px;
+            margin-bottom: 5px;
+            overflow: hidden;
+        }
+
+        .ob {
+            display: flex;
+            align-items: center;
+            justify-content: space-evenly;
+            margin-top: 50px;
+        }
+
+        #predict {
+            color: #fea4b9;
+            font-weight: 600;
+            font-size: large;
+            background-color: white;
+            border: 1px solid grey;
+            width: 100px;
+            height: 30px;
+            border-radius: 50px;
+            margin-bottom: 20px;
+        }
+        #predict:hover {
+            background-color: lavender;
+        }
+        #predict:focus {
+            background-color: white;
+        }
+
+        @media only screen and (max-width: 600px) {
+            .ob {
+                flex-direction: column;
+                margin-top: 10px;
+            }
+            nav {
+                gap: 0px;
+            }
+        }
+
+
+        
+    </style>
+</head>
+<body>
+    <nav>
+        <h1>Flower Prediction</h1>
+        <img class="im" src="../static/ic.svg" alt="dff">
+    </nav>
+
+    <div class="ob">
+        <div class="ib">
+            <div class="flo">
+                <img style="width: 100%;" id="pred" src="../static/ic.svg" alt="">
+            </div>
+            
+            <div id="result">
+                
+            </div>
+            
+        </div>
+
+        <div class="vb">
+            <div class="hb vbl">
+                <h2>Sepal Length : <span id="slv">0.0</span> cm</h2>
+                <div style="width: 100%;display: flex;justify-content: center;align-items: center;gap: 10px;">
+                    <input type="range" id="sl" min="0" max="5" step="0.1" value="0">
+                    
+                </div>
+                
+            </div>
+            
+            <div class="hb">
+                <h2>Sepal Width : <span id="swv">0.0</span> cm</h2>
+                <div style="width: 100%;display: flex;justify-content: center;align-items: center;gap: 10px;">
+                    <input type="range" id="sw" min="0" max="5" step="0.1" value="0">
+                </div>
+                
+            </div>
+
+            <div class="hb">
+                <h2>Petal Length : <span id="plv">0.0</span> cm</h2>
+                <div style="width: 100%;display: flex;justify-content: center;align-items: center;gap: 10px;">
+                    <input type="range" id="pl" min="0" max="5" step="0.1" value="0">
+                </div>
+                
+            </div>
+            <div class="hb">
+                <h2>Petal Width : <span id="pwv">0.0</span> cm</h2>
+                <div style="width: 100%;display: flex;justify-content: center;align-items: center;gap: 10px;">
+                    <input type="range" id="pw" min="0" max="5" step="0.1" value="0">
+                </div>
+                
+            </div>
+
+            <div style="width: 100%; display: flex;justify-content: center;">
+                <button id="predict">Predict</button>
+            </div>
+            
+        </div>
+    </div>
+    
+
+
+
+
+
+    <script>
+        const pl = document.getElementById('pl');
+        const plv = document.getElementById('plv');
+
+        pl.addEventListener('input', function() {
+            const petalLength = parseFloat(this.value).toFixed(1); // Format to 1 decimal place
+            plv.textContent = petalLength;
+        });
+
+        const pw = document.getElementById('pw');
+        const pwv = document.getElementById('pwv');
+
+        pw.addEventListener('input', function() {
+            const petalWidth = parseFloat(this.value).toFixed(1); // Format to 1 decimal place
+            pwv.textContent = petalWidth;
+        });
+
+        const sl = document.getElementById('sl');
+        const slv = document.getElementById('slv');
+
+        sl.addEventListener('input', function() {
+            const sepalLength = parseFloat(this.value).toFixed(1); // Format to 1 decimal place
+            slv.textContent = sepalLength;
+        });
+
+        const sw = document.getElementById('sw');
+        const swv = document.getElementById('swv');
+
+        sw.addEventListener('input', function() {
+            const sepalWidth = parseFloat(this.value).toFixed(1); // Format to 1 decimal place
+            swv.textContent = sepalWidth;
+        });
+
+
+
+
+
+
+        const aInput = document.getElementById('sl');
+        const bInput = document.getElementById('sw');
+        const cInput = document.getElementById('pl');
+        const dInput = document.getElementById('pw');
+        const predictButton = document.getElementById('predict');
+        const resultDiv = document.getElementById('result');
+
+        predictButton.addEventListener('click', async () => {
+            const a = parseFloat(aInput.value);
+            const b = parseFloat(bInput.value);
+            const c = parseFloat(cInput.value);
+            const d = parseFloat(dInput.value);
+
+            const data = {a:a,b:b,c:c,d:d};
+
+            try {
+                const response = await fetch('https://iris-orbc.onrender.com/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+                });
+
+                if (!response.ok) {
+                throw new Error(`API request failed with status ${response.status}`);
+                }
+
+                const prediction = await response.json(); // Assuming the response is parsed as JSON
+
+                if (!prediction || !prediction.length) {
+                throw new Error('Invalid prediction response: Missing or empty array');
+                }
+
+                const flowerClass = prediction[0]; // Assuming the API returns an array with the predicted class at index 0
+
+                let flowerImage;
+                let arr = ['Setosa', 'Versicolor', 'Virginica']
+                switch (flowerClass) {
+                case 0:
+                    flowerImage = "../static/se.jpg";
+                    break;
+                case 1:
+                    flowerImage = "../static/vsi.jpeg";
+                    break;
+                case 2:
+                    flowerImage = "../static/vca.jpeg";
+                    break;
+                default:
+                    flowerImage = "../static/ic.svg";
+                }
+
+                resultDiv.innerHTML = `<h3>Predicted Flower Class is ${arr[flowerClass]}</h3><br>`;
+
+                
+                const imageElement = document.getElementById('pred');
+                if (imageElement) {
+                    imageElement.src = flowerImage; // Update the src attribute with the new image URL
+                } else {
+                    throw new Error('Image element with id "pred" not found');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                resultDiv.textContent = `Error: ${error.message}`;
+            }
+        });
+    </script>
+    
+</body>
+</html>
