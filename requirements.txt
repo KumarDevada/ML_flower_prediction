@@ -3,5 +3,5 @@ Flask
 numpy
 scikit_learn
 gunicorn
-
+flask-cors
 
